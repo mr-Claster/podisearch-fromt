@@ -1,0 +1,130 @@
+.search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 26vh;
+    transition: margin-top 0.5s ease;
+}
+
+.search-img {
+    max-height: 150px;
+    margin-bottom: 20px;
+}
+
+.search-title {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+}
+
+.search-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#search-input {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    outline: none;
+    width: 600px;
+    font-size: 16px;
+    color: #333;
+}
+
+#search-button {
+    background-image: url('search-icon.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border: none;
+    background-color: #F8F8F8;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#search-button:hover {
+    background-color: #F0F0F0;
+}
+
+#search-button i {
+    font-size: 24px;
+}
+
+.results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
+}
+
+.podcast-box {
+    display: flex;
+    width: 70%;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.podcast-box img {
+    max-width: 150px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
+.podcast-title {
+    align-self: flex-start;
+    margin: 0;
+}
+.podcast-title b {
+    color: black;
+}
+
+.podcast-title a {
+    color: #333;
+    text-decoration: none;
+}
+
+.podcast-title a:hover {
+    text-decoration: underline;
+}
+
+.podcast-published {
+    font-size: 14px;
+    color: #888;
+}
+.podcast-words {
+    margin: 0;
+    font-size: 14px;
+    color: #888;
+}
+
+span:hover::before {
+    content: attr(title);
+    background-color: #555;
+    color: #fff;
+    padding: 4px;
+    position: absolute;
+    z-index: 1;
+}

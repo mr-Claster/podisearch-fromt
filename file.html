@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Search Box Example</title>
+    <link rel="stylesheet" href="file.css">
+</head>
+<body>
+    <div class="search-container">
+        <img src="podisearch-title.png" title="podisearch-title" class="search-img">
+        <div class="search-input-container">
+            <input type="text" id="search-input" placeholder="Search...">
+            <button id="search-button"></button>
+        </div>
+    </div>
+    <div class="results">
+
+    </div>
+<script>
+    const searchContainer = document.querySelector('.search-container');
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    const results = document.querySelector('.results');
+    let previousExist = false;
+
+    async function performSearch() {
+        const searchTerm = searchInput.value;
+
+        try {
+            const response = await fetch(`http://localhost:8080/podcasts?text=${searchTerm}`);
+            const podcasts = await response.json();
+
+            if (podcasts && podcasts.length === 0) {
+                searchContainer.style.marginTop = '26vh';
+                results.style.maxHeight = '0px';
+                previousExist = false;
+                await sleep(500);
+            } else {
+                if (previousExist === true) {
+                    results.style.maxHeight = '0px';
+                    await sleep(500);
+                }
+
+                searchContainer.style.marginTop = '5vh';
+                results.style.maxHeight = (190 * podcasts.length + 20) + 'px';
+                previousExist = true;
+            }
+
+            results.innerHTML = '';
+            podcasts.forEach(podcast => {
+                showPodcast(podcast, searchTerm);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function showPodcast(podcast, searchTerm) {
+        const info = document.createElement('div');
+        info.className = 'podcast-box';
+
+        const img = document.createElement('img');
+        img.src = podcast.urlToImg;
+        img.alt = podcast.title;
+        info.appendChild(img);
+
+        const podcastDetails = document.createElement('div');
+        info.appendChild(podcastDetails);
+
+        const title = document.createElement('h3');
+        title.className = 'podcast-title';
+        const titleLink = document.createElement('a');
+        titleLink.href = '#';
+        titleLink.textContent = podcast.title;
+        title.appendChild(titleLink);
+        podcastDetails.appendChild(title);
+
+        const words = document.createElement('p');
+        podcast.words.forEach(wordObj => {
+            const wordEl = document.createElement('span');
+            wordEl.textContent = wordObj.word + ' ';
+            if (wordObj.word === searchTerm) {
+                const formattedNumber = new Intl.NumberFormat('en-US',
+                    { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(wordObj.startTime);
+                wordEl.title = `time code: ${formattedNumber}`;
+                wordEl.style.color = 'black';
+            }
+            words.appendChild(wordEl);
+        });
+
+        words.className = 'podcast-words';
+        podcastDetails.appendChild(words);
+
+        const published = document.createElement('p');
+        published.className = 'podcast-published';
+
+        const publishedString = podcast.published.toString();
+        const dateParts = publishedString.split(',').map(Number);
+
+        const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], dateParts[3], dateParts[4], dateParts[5]);
+        const formattedDate = date.toISOString().replace('T', ', ').replace(/\.\d+Z$/, '');
+        published.textContent = `Published: ${formattedDate}`;
+        podcastDetails.appendChild(published);
+        results.appendChild(info);
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    searchButton.addEventListener('click', () => {
+        performSearch();
+    });
+
+    searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            performSearch();
+        }
+    });
+</script>
+
+</body>
+</html>
